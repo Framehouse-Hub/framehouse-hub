@@ -1039,7 +1039,7 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   globals: {
     header: Header;
@@ -1097,21 +1097,21 @@ export interface UserAuthOperations {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   name?: string | null;
-  roles?: ('admin' | 'customer')[] | null;
+  roles?: ('admin' | 'creative' | 'viewer')[] | null;
   orders?: {
-    docs?: (string | Order)[];
+    docs?: (number | Order)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   cart?: {
-    docs?: (string | Cart)[];
+    docs?: (number | Cart)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   addresses?: {
-    docs?: (string | Address)[];
+    docs?: (number | Address)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -1138,11 +1138,11 @@ export interface User {
  * via the `definition` "orders".
  */
 export interface Order {
-  id: string;
+  id: number;
   items?:
     | {
-        product?: (string | null) | Product;
-        variant?: (string | null) | Variant;
+        product?: (number | null) | Product;
+        variant?: (number | null) | Variant;
         quantity: number;
         id?: string | null;
       }[]
@@ -1160,9 +1160,9 @@ export interface Order {
     country?: string | null;
     phone?: string | null;
   };
-  customer?: (string | null) | User;
+  customer?: (number | null) | User;
   customerEmail?: string | null;
-  transactions?: (string | Transaction)[] | null;
+  transactions?: (number | Transaction)[] | null;
   status?: OrderStatus;
   amount?: number | null;
   currency?: 'USD' | null;
@@ -1174,7 +1174,7 @@ export interface Order {
  * via the `definition` "products".
  */
 export interface Product {
-  id: string;
+  id: number;
   title: string;
   description?: {
     root: {
@@ -1193,32 +1193,32 @@ export interface Product {
   } | null;
   gallery?:
     | {
-        image: string | Media;
-        variantOption?: (string | null) | VariantOption;
+        image: number | Media;
+        variantOption?: (number | null) | VariantOption;
         id?: string | null;
       }[]
     | null;
   layout?: (CallToActionBlock | ContentBlock | MediaBlock)[] | null;
   inventory?: number | null;
   enableVariants?: boolean | null;
-  variantTypes?: (string | VariantType)[] | null;
+  variantTypes?: (number | VariantType)[] | null;
   variants?: {
-    docs?: (string | Variant)[];
+    docs?: (number | Variant)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;
-  relatedProducts?: (string | Product)[] | null;
+  relatedProducts?: (number | Product)[] | null;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1234,7 +1234,7 @@ export interface Product {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt: string;
   caption?: {
     root: {
@@ -1268,9 +1268,9 @@ export interface Media {
  * via the `definition` "variantOptions".
  */
 export interface VariantOption {
-  id: string;
+  id: number;
   _variantOptions_options_order?: string | null;
-  variantType: string | VariantType;
+  variantType: number | VariantType;
   label: string;
   /**
    * should be defaulted or dynamic based on label
@@ -1285,11 +1285,11 @@ export interface VariantOption {
  * via the `definition` "variantTypes".
  */
 export interface VariantType {
-  id: string;
+  id: number;
   label: string;
   name: string;
   options?: {
-    docs?: (string | VariantOption)[];
+    docs?: (number | VariantOption)[];
     hasNextPage?: boolean;
     totalDocs?: number;
   };
@@ -1324,7 +1324,7 @@ export interface CallToActionBlock {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: string | Page;
+            value: number | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -1345,7 +1345,7 @@ export interface CallToActionBlock {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: string;
+  id: number;
   title: string;
   publishedOn?: string | null;
   hero: {
@@ -1372,7 +1372,7 @@ export interface Page {
             newTab?: boolean | null;
             reference?: {
               relationTo: 'pages';
-              value: string | Page;
+              value: number | Page;
             } | null;
             url?: string | null;
             label: string;
@@ -1384,7 +1384,7 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
+    media?: (number | null) | Media;
   };
   layout: (
     | CallToActionBlock
@@ -1401,7 +1401,7 @@ export interface Page {
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
   /**
@@ -1442,7 +1442,7 @@ export interface ContentBlock {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: string | Page;
+            value: number | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -1463,7 +1463,7 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -1490,12 +1490,12 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'products' | null;
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'products';
-        value: string | Product;
+        value: number | Product;
       }[]
     | null;
   id?: string | null;
@@ -1507,7 +1507,7 @@ export interface ArchiveBlock {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: string;
+  id: number;
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -1524,12 +1524,12 @@ export interface Category {
 export interface CarouselBlock {
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'products' | null;
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'products';
-        value: string | Product;
+        value: number | Product;
       }[]
     | null;
   /**
@@ -1538,7 +1538,7 @@ export interface CarouselBlock {
   populatedDocs?:
     | {
         relationTo: 'products';
-        value: string | Product;
+        value: number | Product;
       }[]
     | null;
   /**
@@ -1554,7 +1554,7 @@ export interface CarouselBlock {
  * via the `definition` "ThreeItemGridBlock".
  */
 export interface ThreeItemGridBlock {
-  products?: (string | Product)[] | null;
+  products?: (number | Product)[] | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'threeItemGrid';
@@ -1589,7 +1589,7 @@ export interface BannerBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
+  form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -1615,7 +1615,7 @@ export interface FormBlock {
  * via the `definition` "forms".
  */
 export interface Form {
-  id: string;
+  id: number;
   title: string;
   fields?:
     | (
@@ -1789,13 +1789,13 @@ export interface Form {
  * via the `definition` "variants".
  */
 export interface Variant {
-  id: string;
+  id: number;
   /**
    * Used for administrative purposes, not shown to customers. This is populated by default.
    */
   title?: string | null;
-  product: string | Product;
-  options: (string | VariantOption)[];
+  product: number | Product;
+  options: (number | VariantOption)[];
   inventory?: number | null;
   priceInUSDEnabled?: boolean | null;
   priceInUSD?: number | null;
@@ -1809,11 +1809,11 @@ export interface Variant {
  * via the `definition` "transactions".
  */
 export interface Transaction {
-  id: string;
+  id: number;
   items?:
     | {
-        product?: (string | null) | Product;
-        variant?: (string | null) | Variant;
+        product?: (number | null) | Product;
+        variant?: (number | null) | Variant;
         quantity: number;
         id?: string | null;
       }[]
@@ -1837,10 +1837,10 @@ export interface Transaction {
     phone?: string | null;
   };
   status: 'pending' | 'succeeded' | 'failed' | 'cancelled' | 'expired' | 'refunded';
-  customer?: (string | null) | User;
+  customer?: (number | null) | User;
   customerEmail?: string | null;
-  order?: (string | null) | Order;
-  cart?: (string | null) | Cart;
+  order?: (number | null) | Order;
+  cart?: (number | null) | Cart;
   amount?: number | null;
   currency?: 'USD' | null;
   updatedAt: string;
@@ -1851,16 +1851,16 @@ export interface Transaction {
  * via the `definition` "carts".
  */
 export interface Cart {
-  id: string;
+  id: number;
   items?:
     | {
-        product?: (string | null) | Product;
-        variant?: (string | null) | Variant;
+        product?: (number | null) | Product;
+        variant?: (number | null) | Variant;
         quantity: number;
         id?: string | null;
       }[]
     | null;
-  customer?: (string | null) | User;
+  customer?: (number | null) | User;
   purchasedAt?: string | null;
   status?: ('active' | 'purchased' | 'abandoned') | null;
   subtotal?: number | null;
@@ -1873,8 +1873,8 @@ export interface Cart {
  * via the `definition` "addresses".
  */
 export interface Address {
-  id: string;
-  customer?: (string | null) | User;
+  id: number;
+  customer?: (number | null) | User;
   title?: string | null;
   firstName?: string | null;
   lastName?: string | null;
@@ -1934,8 +1934,8 @@ export interface Address {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: string;
-  form: string | Form;
+  id: number;
+  form: number | Form;
   submissionData?:
     | {
         field: string;
@@ -1951,7 +1951,7 @@ export interface FormSubmission {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -1968,68 +1968,68 @@ export interface PayloadKv {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'pages';
-        value: string | Page;
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'categories';
-        value: string | Category;
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'forms';
-        value: string | Form;
+        value: number | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
-        value: string | FormSubmission;
+        value: number | FormSubmission;
       } | null)
     | ({
         relationTo: 'addresses';
-        value: string | Address;
+        value: number | Address;
       } | null)
     | ({
         relationTo: 'variants';
-        value: string | Variant;
+        value: number | Variant;
       } | null)
     | ({
         relationTo: 'variantTypes';
-        value: string | VariantType;
+        value: number | VariantType;
       } | null)
     | ({
         relationTo: 'variantOptions';
-        value: string | VariantOption;
+        value: number | VariantOption;
       } | null)
     | ({
         relationTo: 'products';
-        value: string | Product;
+        value: number | Product;
       } | null)
     | ({
         relationTo: 'carts';
-        value: string | Cart;
+        value: number | Cart;
       } | null)
     | ({
         relationTo: 'orders';
-        value: string | Order;
+        value: number | Order;
       } | null)
     | ({
         relationTo: 'transactions';
-        value: string | Transaction;
+        value: number | Transaction;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -2039,10 +2039,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -2062,7 +2062,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -2698,7 +2698,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "header".
  */
 export interface Header {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -2706,7 +2706,7 @@ export interface Header {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: string | Page;
+            value: number | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -2722,7 +2722,7 @@ export interface Header {
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: string;
+  id: number;
   navItems?:
     | {
         link: {
@@ -2730,7 +2730,7 @@ export interface Footer {
           newTab?: boolean | null;
           reference?: {
             relationTo: 'pages';
-            value: string | Page;
+            value: number | Page;
           } | null;
           url?: string | null;
           label: string;
@@ -5755,6 +5755,46 @@ export const Header: GlobalConfig = {
     },
   ],
 }
+
+
+===== FILE: src/migrations/2025-01-roles-enum-update.ts =====
+
+import { MigrateDownArgs, MigrateUpArgs, sql } from '@payloadcms/db-postgres'
+
+/**
+ * Migration: Add "viewer" and "creative" to the enum_users_roles enum
+ * This resolves:
+ *   invalid input value for enum enum_users_roles: "viewer"
+ */
+
+export async function up({ db }: MigrateUpArgs): Promise<void> {
+  // Add values to enum (safe operation — Postgres only allows adding, not removing)
+  await db.execute(
+    sql`ALTER TYPE enum_users_roles ADD VALUE IF NOT EXISTS 'viewer'`
+  )
+  await db.execute(
+    sql`ALTER TYPE enum_users_roles ADD VALUE IF NOT EXISTS 'creative'`
+  )
+}
+
+export async function down({ db }: MigrateDownArgs): Promise<void> {
+  // WARNING: Postgres does not support removing values from ENUMs.
+  // To rollback, you would need to recreate the enum manually.
+  // In this migration, the rollback is intentionally a no-op.
+
+  console.warn(
+    'Down migration skipped: Postgres cannot remove enum values "viewer" or "creative".'
+  )
+}
+
+
+===== FILE: src/migrations/index.ts =====
+
+// src/migrations/index.ts
+// Payload automatically collects the migration files in this folder
+
+export * from '@/migrations/2025-01-roles-enum-update';
+
 
 
 ===== FILE: src/endpoints/seed/product-tshirt.ts =====
@@ -10552,53 +10592,32 @@ import { BeforeDashboard as BeforeDashboard_1a7510af427896d367a49dbf838d2de6 } f
 import { BeforeLogin as BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e } from '@/components/BeforeLogin'
 
 export const importMap = {
-  '@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell':
-    RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
-  '@payloadcms/richtext-lexical/rsc#RscEntryLexicalField':
-    RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
-  '@payloadcms/richtext-lexical/rsc#LexicalDiffComponent':
-    LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
-  '@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient':
-    InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient':
-    FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#HeadingFeatureClient':
-    HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#UnderlineFeatureClient':
-    UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#BoldFeatureClient':
-    BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#ItalicFeatureClient':
-    ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#OrderedListFeatureClient':
-    OrderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#UnorderedListFeatureClient':
-    UnorderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#LinkFeatureClient':
-    LinkFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#IndentFeatureClient':
-    IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/richtext-lexical/client#TableFeatureClient':
-    TableFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@payloadcms/plugin-seo/client#OverviewComponent':
-    OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  '@payloadcms/plugin-seo/client#MetaTitleComponent':
-    MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  '@payloadcms/plugin-seo/client#MetaImageComponent':
-    MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  '@payloadcms/plugin-seo/client#MetaDescriptionComponent':
-    MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  '@payloadcms/plugin-seo/client#PreviewComponent':
-    PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  '@payloadcms/ui#SlugField': SlugField_3817bf644402e67bfe6577f60ef982de,
-  '@payloadcms/plugin-ecommerce/rsc#VariantOptionsSelector':
-    VariantOptionsSelector_b91672ccd6e8b071c11142ab941fedfb,
-  '@payloadcms/plugin-ecommerce/client#PriceCell': PriceCell_e27bf7b8cc50640dcdd584767b8eac3c,
-  '@payloadcms/plugin-ecommerce/rsc#PriceInput': PriceInput_b91672ccd6e8b071c11142ab941fedfb,
-  '@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient':
-    HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
-  '@/components/BeforeDashboard#BeforeDashboard': BeforeDashboard_1a7510af427896d367a49dbf838d2de6,
-  '@/components/BeforeLogin#BeforeLogin': BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e,
+  "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
+  "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
+  "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
+  "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#HeadingFeatureClient": HeadingFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#OrderedListFeatureClient": OrderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#UnorderedListFeatureClient": UnorderedListFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#LinkFeatureClient": LinkFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#IndentFeatureClient": IndentFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/richtext-lexical/client#TableFeatureClient": TableFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  "@payloadcms/ui#SlugField": SlugField_3817bf644402e67bfe6577f60ef982de,
+  "@payloadcms/plugin-ecommerce/rsc#VariantOptionsSelector": VariantOptionsSelector_b91672ccd6e8b071c11142ab941fedfb,
+  "@payloadcms/plugin-ecommerce/client#PriceCell": PriceCell_e27bf7b8cc50640dcdd584767b8eac3c,
+  "@payloadcms/plugin-ecommerce/rsc#PriceInput": PriceInput_b91672ccd6e8b071c11142ab941fedfb,
+  "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "@/components/BeforeDashboard#BeforeDashboard": BeforeDashboard_1a7510af427896d367a49dbf838d2de6,
+  "@/components/BeforeLogin#BeforeLogin": BeforeLogin_8a7ab0eb7ab5c511aba12e68480bfe5e
 }
 
 
@@ -10806,6 +10825,20 @@ export const adminOrCustomerOwner: Access = ({ req: { user } }) => {
 }
 
 
+===== FILE: src/access/creativeOrAdmin.ts =====
+
+// src/access/creativeOrAdmin.ts
+import type { User } from '@/payload-types'
+import type { Access } from 'payload'
+import { checkRole } from './utilities'
+
+export const creativeOrAdmin: Access = ({ req: { user } }) => {
+  if (!user) return false
+  // admin OR creative
+  return checkRole(['admin', 'creative'], user as User)
+}
+
+
 ===== FILE: src/access/adminOnly.ts =====
 
 import type { Access } from 'payload'
@@ -10816,6 +10849,19 @@ export const adminOnly: Access = ({ req: { user } }) => {
   if (user) return checkRole(['admin'], user)
 
   return false
+}
+
+
+===== FILE: src/access/creativeOnly.ts =====
+
+// src/access/creativeOnly.ts
+import type { User } from '@/payload-types'
+import type { Access } from 'payload'
+import { checkRole } from './utilities'
+
+export const creativeOnly: Access = ({ req: { user } }) => {
+  if (!user) return false
+  return checkRole(['creative'], user as User)
 }
 
 
@@ -18463,6 +18509,8 @@ export const Categories: CollectionConfig = {
 
 ===== FILE: src/collections/Media.ts =====
 
+import { creativeOrAdmin } from '@/access/creativeOrAdmin'
+import { publicAccess } from '@/access/publicAccess'
 import type { CollectionConfig } from 'payload'
 
 import {
@@ -18482,7 +18530,14 @@ export const Media: CollectionConfig = {
   },
   slug: 'media',
   access: {
-    read: () => true,
+    // Everyone (including unauthenticated visitors) can READ media metadata & public preview URLs
+    // This matches your "public portfolios" requirement
+    read: publicAccess,
+
+    // Only creatives and admins can create/upload/update/delete assets
+    create: creativeOrAdmin,
+    update: creativeOrAdmin,
+    delete: creativeOrAdmin,
   },
   fields: [
     {
@@ -18728,9 +18783,10 @@ import type { CollectionConfig } from 'payload'
 
 import { adminOnly } from '@/access/adminOnly'
 import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
-import { publicAccess } from '@/access/publicAccess'
 import { adminOrSelf } from '@/access/adminOrSelf'
+import { publicAccess } from '@/access/publicAccess'
 import { checkRole } from '@/access/utilities'
+import { protectRoles } from '@/collections/Users/hooks/protectRoles'
 
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
 
@@ -18764,19 +18820,23 @@ export const Users: CollectionConfig = {
         read: adminOnlyFieldAccess,
         update: adminOnlyFieldAccess,
       },
-      defaultValue: ['customer'],
+      defaultValue: ['viewer'],
       hasMany: true,
       hooks: {
-        beforeChange: [ensureFirstUserIsAdmin],
+        beforeChange: [ensureFirstUserIsAdmin, protectRoles],
       },
       options: [
         {
-          label: 'admin',
+          label: 'Admin',
           value: 'admin',
         },
         {
-          label: 'customer',
-          value: 'customer',
+          label: 'Creative',
+          value: 'creative',
+        },
+        {
+          label: 'Viewer',
+          value: 'viewer',
         },
       ],
     },
@@ -18811,6 +18871,33 @@ export const Users: CollectionConfig = {
       },
     },
   ],
+}
+
+
+===== FILE: src/collections/Users/hooks/protectRoles.ts =====
+
+// src/collections/Users/hooks/protectRoles.ts
+import type { User } from '@/payload-types'
+import type { FieldHook } from 'payload'
+
+/**
+ * Prevent non-admins from assigning elevated roles.
+ * - If the current user is not admin, they can only set ['viewer'].
+ * - If admin is creating/updating, ensure 'viewer' is always present.
+ */
+export const protectRoles: FieldHook<{ id: string } & User> = ({ req, data }) => {
+  const isAdmin = !!req.user?.roles?.includes('admin')
+
+  if (!isAdmin) {
+    // Force non-admin creators/updaters to only have 'viewer'
+    return ['viewer']
+  }
+
+  // Admins: ensure 'viewer' role is present (makes downstream access checks simpler)
+  const userRoles = new Set(data?.roles || [])
+  userRoles.add('viewer')
+
+  return [...userRoles.values()]
 }
 
 
